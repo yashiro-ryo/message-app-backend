@@ -10,7 +10,7 @@ async function login(email: string, password: string) {
   // Fetch user
   // TODO 型をどうにかする
   const [user]: any = await con.query(
-    `select id, name, password from user where email = "${email}"`
+    `select user_id, name, password from user where email = "${email}"`
   );
   if (user.length == 0 || user.length >= 2) {
     throw console.log("cannot find user");
