@@ -11,7 +11,7 @@ async function getAllUsers(id: number) {
     // name: string, id: number
     const con = await mysql.createConnection(config);
     const [users]: any = await con.query(
-      `select id, name from user where id in (select friendId from friends where userId = ${id})`
+      `select user_id, name from user where user_id in (select friend_user_id from user_friend where user_id = ${id})`
     );
     con.end();
     return users;

@@ -1,6 +1,6 @@
-import { StatusCodes } from 'http-status-codes';
-import mysql from 'mysql2/promise'
-import config from '../config/dbConfig'
+import { StatusCodes } from "http-status-codes";
+import mysql from "mysql2/promise";
+import config from "../config/dbConfig";
 
 /**
  * トークルーム取得
@@ -11,7 +11,7 @@ async function getTalkrooms(userId: number) {
   try {
     const con = await mysql.createConnection(config);
     const [talkrooms] = await con.query(
-      "select talkroomId, talkroomName from talkroom where userId=" + userId
+      `select talkroom_id, talkroom_name from talkroom where talkroom_id in (select talkroom_id from user_talkroom where user_id = ${userId})`
     );
     console.log(talkrooms);
     con.end;
@@ -45,13 +45,20 @@ async function getTalk(talkroomId: number) {
  * @param {talkroomId: number, userId: number, msgBody: string, sentTime: number}
  * @returns { StatusCodes : number} // okで200
  */
-async function submitMessage(talkroomId: number, userId: number, msgBody: string, sentTime: number): Promise<number>{
-  try{
+async function submitMessage(
+  talkroomId: number,
+  userId: number,
+  msgBody: string,
+  sentTime: number
+): Promise<number> {
+  try {
     const con = await mysql.createConnection(config);
-    con.query(`insert into message value (null, ${talkroomId}, ${userId}, '${msgBody}', ${sentTime})`);
+    con.query(
+      `insert into message value (null, ${talkroomId}, ${userId}, '${msgBody}', ${sentTime})`
+    );
     return 200;
-  }catch(e){
-    console.log('msg-send failed code= 400')
+  } catch (e) {
+    console.log("msg-send failed code= 400");
     return 500;
   }
 }
@@ -59,5 +66,5 @@ async function submitMessage(talkroomId: number, userId: number, msgBody: string
 export default {
   getTalkrooms,
   getTalk,
-  submitMessage
-} as const
+  submitMessage,
+} as const;

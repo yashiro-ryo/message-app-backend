@@ -21,7 +21,7 @@ async function login(email: string, password: string) {
     con.end();
     // return signed jwt
     return {
-      id: user[0].id,
+      id: user[0].user_id,
       name: user[0].name,
       token: jwtUtil.sign({
         id: user[0].id,

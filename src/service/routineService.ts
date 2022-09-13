@@ -4,6 +4,7 @@ import talkpageService from "./talkpageService";
 
 function routine(socket: Socket, userId: number) {
   /* routine */
+  console.log('routine user id :' + userId)
   usersService.getAllUsers(userId).then((value) => {
     socket.emit("update-client-users", value);
   });

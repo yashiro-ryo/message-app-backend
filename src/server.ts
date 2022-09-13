@@ -11,8 +11,8 @@ import "express-async-errors";
 import authService from "./service/authService";
 import usersService from "./service/usersService";
 import talkpageService from "./service/talkpageService";
-import router from './router/router';
-import routine from './service/routineService'
+import router from "./router/router";
+import routine from "./service/routineService";
 import Log from "./Tools/Log";
 import routineService from "./service/routineService";
 
@@ -59,7 +59,9 @@ app.get("/login", (req: Request, res: Response) => {
 // auth login
 app.post("/login", (req: Request, res: Response) => {
   // check user and add token
+  Log.v("email :" + req.body.email + ", password :" + req.body.password);
   authService.login(req.body.email, req.body.password).then((value) => {
+    console.log(value)
     res.send(value);
   });
 });
@@ -89,7 +91,8 @@ io.use((socket, next) => {
 
 io.on("connect", (socket) => {
   router.setupEventHandler(socket);
-  routineService.routine(socket, Number(socket.handshake.query.id))
+  console.log(socket)
+  routineService.routine(socket, Number(socket.handshake.query.id));
   return app.set("socketio", io);
 });
 
